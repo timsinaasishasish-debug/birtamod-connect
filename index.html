@@ -2,48 +2,323 @@
 <html lang="ne">
 <head>
     <meta charset="UTF-8">
-    <title>Birtamode Connect – अन्तरक्रियात्मक डेमो</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Birtamode Connect – स्मार्ट पेरी-अर्बन हब</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- ... (Your existing styles from previous version remain here) ... -->
     <style>
-        /* Add a small style for notification popups */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fefaf5;
+            color: #1e2f2c;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e9e3d5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c0a86a;
+            border-radius: 10px;
+        }
+
+        /* Hero Section with Gradient & Pattern */
+        .hero {
+            background: linear-gradient(135deg, #0f3b2c 0%, #2a6e3a 100%);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.1"><path fill="white" d="M50 50 L80 30 L110 50 L130 80 L110 110 L80 130 L50 110 L30 80 Z"/><circle cx="160" cy="40" r="15"/><circle cx="30" cy="170" r="20"/></svg>');
+            background-repeat: repeat;
+            background-size: 60px;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+        .hero h1 i {
+            margin-right: 12px;
+            background: #ffd966;
+            color: #1e5f2e;
+            padding: 8px;
+            border-radius: 60%;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        .badge-container {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .badge {
+            background: rgba(255,255,240,0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 80px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,200,0.4);
+        }
+        .badge i { margin-right: 6px; }
+        .badge:hover { background: #ffd966; color: #1e5f2e; transform: translateY(-2px); }
+
+        /* Login Bar */
+        .login-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+        #loginStatus {
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+        .demo-btn {
+            background: #ffc107;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .demo-btn-outline {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        .demo-btn:hover { transform: scale(1.02); background: #e6a800; }
+
+        /* Tabs - modern */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            background: white;
+            padding: 1rem 1rem 0 1rem;
+            border-bottom: 1px solid #e2e0d4;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 250, 240, 0.95);
+            backdrop-filter: blur(8px);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.8rem 1.4rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: all 0.2s;
+            color: #3a5a40;
+            font-family: inherit;
+        }
+        .tab-btn i { margin-right: 8px; }
+        .tab-btn.active {
+            background: #2d6a4f;
+            color: white;
+            box-shadow: 0 4px 12px rgba(45,106,79,0.3);
+        }
+        .tab-btn:not(.active):hover { background: #e9dfc7; }
+
+        /* Content */
+        .tab-content {
+            display: none;
+            padding: 2.5rem 1.5rem;
+            max-width: 1400px;
+            margin: auto;
+            animation: fadeUp 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* Cards – Modern Glassmorphism */
+        .market-grid, .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .card {
+            background: rgba(255,255,245,0.9);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            border: 1px solid rgba(210, 180, 120, 0.3);
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.12);
+            border-color: #d4af37;
+        }
+        .card-header {
+            background: linear-gradient(120deg, #f5b342, #e07c1f);
+            color: white;
+            padding: 1rem 1.2rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-header i { font-size: 1.6rem; }
+        .card-body {
+            padding: 1.2rem;
+        }
+        .product-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        .product-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #f0e0b0;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .small-order {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .small-order:hover { background: #1b4d3a; transform: scale(0.96); }
+
+        /* App Mockup – 3D effect */
+        .app-mock {
+            background: linear-gradient(145deg, #262b2a, #1e2221);
+            border-radius: 56px;
+            padding: 20px;
+            max-width: 380px;
+            margin: 2rem auto;
+            box-shadow: 0 35px 45px rgba(0,0,0,0.3);
+        }
+        .app-screen {
+            background: #fef9ef;
+            border-radius: 40px;
+            overflow: hidden;
+        }
+        .app-header {
+            background: #2a6e3a;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .order-item {
+            background: white;
+            margin: 12px;
+            padding: 12px 16px;
+            border-radius: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .order-btn {
+            background: #ffb347;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #eaf7ea;
+            border-radius: 48px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2d6a4f;
+        }
+
+        /* Notification */
         .notification {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2c3e2f;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 30px;
-            z-index: 1000;
-            animation: fadeInUp 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            bottom: 25px;
+            right: 25px;
+            background: #1e2f2c;
+            color: #ffecb3;
+            padding: 14px 24px;
+            border-radius: 60px;
+            font-weight: 500;
+            z-index: 2000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(8px);
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        footer {
+            background: #0f3b2c;
+            color: #ccd5ae;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
         }
-        .order-summary {
-            background: #f0f7f0;
-            padding: 10px;
-            border-radius: 20px;
-            margin-top: 10px;
-            border-left: 4px solid #f7a81e;
-        }
-        .dashboard-panel {
-            background: white;
-            border-radius: 20px;
-            padding: 1rem;
-            margin-top: 1rem;
-            border: 1px solid #ddd;
-        }
-        /* Make demo interactive elements stand out */
-        .interactive-card {
-            transition: all 0.2s ease;
-        }
-        .interactive-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 1.7rem; }
+            .tab-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -51,7 +326,7 @@
 
 <div class="hero">
     <h1><i class="fas fa-leaf"></i> Birtamode Connect</h1>
-    <p>स्थानीय, अर्गानिक र परम्परागत उत्पादनलाई स्मार्ट डेलिभरीसँग जोड्ने प्लेटफर्म</p>
+    <p>स्थानीय, अर्गानिक, परम्परागत – स्मार्ट डेलिभरीसँग जोडिएको बजार</p>
     <div class="badge-container">
         <span class="badge"><i class="fas fa-tractor"></i> शनिसचरे</span>
         <span class="badge"><i class="fas fa-store"></i> धुलाबारी</span>
@@ -59,11 +334,10 @@
         <span class="badge"><i class="fas fa-fish"></i> बुढाबारे</span>
         <span class="badge"><i class="fas fa-spa"></i> चैतुबारी</span>
     </div>
-    <!-- Simple Login/Logout UI for demo -->
-    <div style="margin-top: 15px;">
+    <div class="login-bar">
         <span id="loginStatus"></span>
-        <button id="demoLoginBtn" style="background:#ffc107; color:#2c3e2f; border:none; padding:5px 15px; border-radius:20px;"><i class="fas fa-user"></i> प्रवेश गर्नुहोस् (Demo)</button>
-        <button id="demoLogoutBtn" style="background:#ccc; color:#2c3e2f; border:none; padding:5px 15px; border-radius:20px; display:none;"><i class="fas fa-sign-out-alt"></i> बाहिरिनुहोस्</button>
+        <button id="demoLoginBtn" class="demo-btn"><i class="fas fa-user-plus"></i> प्रवेश गर्नुहोस्</button>
+        <button id="demoLogoutBtn" class="demo-btn demo-btn-outline" style="display:none;"><i class="fas fa-sign-out-alt"></i> बाहिरिनुहोस्</button>
     </div>
 </div>
 
@@ -75,296 +349,207 @@
     <button class="tab-btn" data-tab="orders"><i class="fas fa-shopping-cart"></i> मेरो अर्डर</button>
 </div>
 
-<!-- Tab 1: Markets (same as before, but we'll add order buttons for simplicity) -->
+<!-- Markets Tab -->
 <div id="markets" class="tab-content active">
-    <h2 style="text-align: center;"><i class="fas fa-handshake"></i> पहिलो चरणका सहभागी बजारहरू</h2>
+    <h2 style="text-align: center;">🌾 पहिलो चरणका सहभागी बजारहरू</h2>
     <div class="market-grid">
-        <div class="card interactive-card" data-market="शनिसचरे">
+        <!-- Card for each market with order buttons -->
+        <div class="card" data-market="शनिसचरे">
             <div class="card-header"><i class="fas fa-apple-alt"></i> शनिसचरे</div>
             <div class="card-body">
-                <p><strong>⚡ विशेषता:</strong> फलफूल डिब्बाबन्दी केन्द्र, अर्गानिक अचार</p>
+                <p><strong>⚡ फलफूल, अचार विशेषज्ञ</strong></p>
                 <ul class="product-list">
-                    <li><i class="fas fa-check-circle"></i> अमला अचार <span class="tag">Organic</span> <button class="small-order" data-product="अमला अचार - शनिसचरे" data-price="120">अर्डर गर्नुहोस्</button></li>
-                    <li><i class="fas fa-check-circle"></i> केरा, अदुवा <button class="small-order" data-product="अदुवा - शनिसचरे" data-price="80">अर्डर गर्नुहोस्</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> अमला अचार (Rs.120)</span> <button class="small-order" data-product="अमला अचार - शनिसचरे" data-price="120">अर्डर</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> ताजा अदुवा (1kg Rs.80)</span> <button class="small-order" data-product="अदुवा - शनिसचरे" data-price="80">अर्डर</button></li>
                 </ul>
             </div>
         </div>
-        <!-- Similar updates for other market cards -->
-        <div class="card interactive-card" data-market="धुलाबारी">
+        <div class="card" data-market="धुलाबारी">
             <div class="card-header"><i class="fas fa-jug"></i> धुलाबारी</div>
             <div class="card-body">
-                <p><strong>⚡ विशेषता:</strong> दुग्धजन्य, हस्तकला (बाँस)</p>
                 <ul class="product-list">
-                    <li><i class="fas fa-check-circle"></i> शुद्ध घ्यू (200ml) <button class="small-order" data-product="शुद्ध घ्यू - धुलाबारी" data-price="450">अर्डर गर्नुहोस्</button></li>
-                    <li><i class="fas fa-check-circle"></i> डोको, नाम्लो <button class="small-order" data-product="डोको - धुलाबारी" data-price="350">अर्डर गर्नुहोस्</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> शुद्ध घ्यू 200ml (Rs.450)</span> <button class="small-order" data-product="शुद्ध घ्यू - धुलाबारी" data-price="450">अर्डर</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> डोको (हस्तकला) Rs.350</span> <button class="small-order" data-product="डोको - धुलाबारी" data-price="350">अर्डर</button></li>
                 </ul>
             </div>
         </div>
-        <div class="card interactive-card" data-market="घैलाडुब्बा">
+        <div class="card" data-market="घैलाडुब्बा">
             <div class="card-header"><i class="fas fa-tools"></i> घैलाडुब्बा</div>
             <div class="card-body">
                 <ul class="product-list">
-                    <li><i class="fas fa-check-circle"></i> भन्टा, बोडी (kg) <button class="small-order" data-product="ताजा बोडी - घैलाडुब्बा" data-price="40">अर्डर गर्नुहोस्</button></li>
-                    <li><i class="fas fa-check-circle"></i> हँसिया, कोदालो <button class="small-order" data-product="हँसिया - घैलाडुब्बा" data-price="250">अर्डर गर्नुहोस्</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> ताजा बोडी (kg Rs.40)</span> <button class="small-order" data-product="ताजा बोडी - घैलाडुब्बा" data-price="40">अर्डर</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> हँसिया (Rs.250)</span> <button class="small-order" data-product="हँसिया - घैलाडुब्बा" data-price="250">अर्डर</button></li>
                 </ul>
             </div>
         </div>
-        <div class="card interactive-card" data-market="बुढाबारे">
+        <div class="card" data-market="बुढाबारे">
             <div class="card-header"><i class="fas fa-fish"></i> बुढाबारे</div>
             <div class="card-body">
                 <ul class="product-list">
-                    <li><i class="fas fa-check-circle"></i> ताजा माछा (kg) <button class="small-order" data-product="ताजा माछा - बुढाबारे" data-price="350">अर्डर गर्नुहोस्</button></li>
-                    <li><i class="fas fa-check-circle"></i> सुगन्धित चामल (kg) <button class="small-order" data-product="सुगन्धित चामल - बुढाबारे" data-price="120">अर्डर गर्नुहोस्</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> ताजा माछा (kg Rs.350)</span> <button class="small-order" data-product="ताजा माछा - बुढाबारे" data-price="350">अर्डर</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> सुगन्धित चामल (kg Rs.120)</span> <button class="small-order" data-product="सुगन्धित चामल - बुढाबारे" data-price="120">अर्डर</button></li>
                 </ul>
             </div>
         </div>
-        <div class="card interactive-card" data-market="चैतुबारी">
+        <div class="card" data-market="चैतुबारी">
             <div class="card-header"><i class="fas fa-seedling"></i> चैतुबारी</div>
             <div class="card-body">
                 <ul class="product-list">
-                    <li><i class="fas fa-check-circle"></i> अलैंची (100gm) <button class="small-order" data-product="अलैंची - चैतुबारी" data-price="150">अर्डर गर्नुहोस्</button></li>
-                    <li><i class="fas fa-check-circle"></i> बेसार पाउडर <button class="small-order" data-product="बेसार पाउडर - चैतुबारी" data-price="80">अर्डर गर्नुहोस्</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> अलैंची 100gm (Rs.150)</span> <button class="small-order" data-product="अलैंची - चैतुबारी" data-price="150">अर्डर</button></li>
+                    <li><span><i class="fas fa-check-circle"></i> बेसार पाउडर (Rs.80)</span> <button class="small-order" data-product="बेसार - चैतुबारी" data-price="80">अर्डर</button></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Tab 2: Products (keep similar interactive elements) -->
+<!-- Products Tab (simplified but attractive) -->
 <div id="products" class="tab-content">
-    <h2 style="text-align: center;"><i class="fas fa-certificate"></i> उत्पादनहरू (यहाँबाट पनि अर्डर गर्न सकिन्छ)</h2>
+    <h2 style="text-align: center;">🍃 अर्गानिक, स्थानीय, परम्परागत सीपका उत्पादनहरू</h2>
     <div class="product-grid">
-        <div class="card interactive-card">
-            <div class="card-header"><i class="fas fa-egg"></i> दुग्ध तथा मह</div>
-            <div class="card-body">
-                <p>धुलाबारीका गाई/भैंसीबाट शुद्ध दूध, घ्यू, पनिर।</p>
-                <button class="small-order" data-product="शुद्ध दूध (1 लिटर) - धुलाबारी" data-price="80">दूध अर्डर गर्नुहोस्</button>
-            </div>
-        </div>
-        <div class="card interactive-card">
-            <div class="card-header"><i class="fas fa-basket-shopping"></i> तरकारी र फलफूल</div>
-            <div class="card-body">
-                <p>घैलाडुब्बाको रासायनिक मलमुक्त साग, केरा।</p>
-                <button class="small-order" data-product="केरा (12 पिस) - घैलाडुब्बा" data-price="100">केरा अर्डर गर्नुहोस्</button>
-            </div>
-        </div>
-        <!-- Add other product cards with order buttons -->
+        <div class="card"><div class="card-header"><i class="fas fa-egg"></i> दुग्ध तथा मह</div><div class="card-body"><p>धुलाबारीको शुद्ध घ्यू, मह, पनिर</p><button class="small-order" data-product="शुद्ध मह - धुलाबारी" data-price="300">अर्डर गर्नुहोस्</button></div></div>
+        <div class="card"><div class="card-header"><i class="fas fa-basket-shopping"></i> तरकारी/फलफूल</div><div class="card-body"><p>घैलाडुब्बाका मौसमी तरकारी, केरा</p><button class="small-order" data-product="मौसमी तरकारी प्याकेट" data-price="100">अर्डर</button></div></div>
+        <div class="card"><div class="card-header"><i class="fas fa-hands"></i> हस्तकला</div><div class="card-body"><p>डोको, नाम्लो, ढाका टोपी, सिक्की</p><button class="small-order" data-product="ढाकाको टोपी" data-price="250">अर्डर</button></div></div>
     </div>
 </div>
 
-<!-- Tab 3: App Demo (fully interactive ordering) -->
+<!-- App Demo Tab (interactive) -->
 <div id="app" class="tab-content">
-    <h2 style="text-align: center;"><i class="fas fa-mobile-screen"></i> Birtamode Connect एप प्रिभ्यू</h2>
+    <h2 style="text-align: center;">📱 मोबाइल एप डेमो – वास्तविक जस्तै अनुभव</h2>
     <div class="app-mock">
         <div class="app-screen">
-            <div class="app-header">
-                <i class="fas fa-map-marker-alt"></i> तपाईंको स्थान: बिरतमोड
-            </div>
-            <div class="order-item">
-                <div><i class="fas fa-leaf"></i> शनिसचरेको अदुवा अचार<br><small>Rs. 120 - अर्गानिक</small></div>
-                <button class="order-btn mock-order" data-product="अदुवा अचार - शनिसचरे" data-price="120">अर्डर</button>
-            </div>
-            <div class="order-item">
-                <div><i class="fas fa-jug"></i> धुलाबारीको शुद्ध घ्यू <br><small>Rs. 450 (200ml)</small></div>
-                <button class="order-btn mock-order" data-product="शुद्ध घ्यू - धुलाबारी" data-price="450">अर्डर</button>
-            </div>
-            <div class="order-item">
-                <div><i class="fas fa-carrot"></i> घैलाडुब्बाको ताजा बोडी <br><small>Rs. 40/kg</small></div>
-                <button class="order-btn mock-order" data-product="ताजा बोडी - घैलाडुब्बा" data-price="40">अर्डर</button>
-            </div>
-            <div class="order-item">
-                <div><i class="fas fa-fish"></i> बुढाबारेको ताजा माछा <br><small>Rs. 350/kg</small></div>
-                <button class="order-btn mock-order" data-product="ताजा माछा - बुढाबारे" data-price="350">अर्डर</button>
-            </div>
+            <div class="app-header"><i class="fas fa-map-marker-alt"></i> बिरतमोड | अर्डर गर्नुहोस्</div>
+            <div class="order-item"><div><strong>अमला अचार</strong><br>शनिसचरे – Rs.120</div><button class="order-btn mock-order" data-product="अमला अचार - शनिसचरे" data-price="120">अर्डर</button></div>
+            <div class="order-item"><div><strong>शुद्ध घ्यू</strong><br>धुलाबारी – Rs.450</div><button class="order-btn mock-order" data-product="शुद्ध घ्यू - धुलाबारी" data-price="450">अर्डर</button></div>
+            <div class="order-item"><div><strong>ताजा माछा</strong><br>बुढाबारे – Rs.350</div><button class="order-btn mock-order" data-product="ताजा माछा - बुढाबारे" data-price="350">अर्डर</button></div>
         </div>
     </div>
 </div>
 
-<!-- Tab 4: Impact (informative) -->
+<!-- Impact Tab -->
 <div id="impact" class="tab-content">
-    <!-- Keep your existing impact content here -->
-    <h2 style="text-align: center;"><i class="fas fa-chart-simple"></i> अपेक्षित प्रभाव (पहिलो चरण)</h2>
+    <h2 style="text-align: center;">📊 समावेशी विकासको प्रभाव</h2>
     <div class="stats">
         <div class="stat"><div class="stat-number">१६८+</div><div>प्रत्यक्ष रोजगारी</div></div>
         <div class="stat"><div class="stat-number">७०%</div><div>आय वृद्धि (तल्लो तह)</div></div>
         <div class="stat"><div class="stat-number">४००+</div><div>उत्पादक परिवार</div></div>
         <div class="stat"><div class="stat-number">३०%</div><div>पलायन दर कमी</div></div>
     </div>
+    <div style="background: #fff0db; border-radius: 32px; padding: 1.8rem; margin-top: 1rem;">
+        <h3><i class="fas fa-chalkboard-user"></i> नीति समाधानको मुख्य बुँदा</h3>
+        <ul style="margin-left: 1.5rem;"><li>✅ डिजिटल प्लेटफर्म "Birtamode Connect"</li><li>✅ पूर्व रिक्सा चालक, दूध बेच्ने महिला → स्मार्ट डेलिभरी एजेन्ट</li><li>✅ प्रत्येक बजारमा संकलन केन्द्र</li><li>✅ अर्गानिक प्रमाणीकरण र Traditional Skill Badge</li></ul>
+    </div>
 </div>
 
-<!-- New Tab 5: My Orders -->
+<!-- Orders Tab -->
 <div id="orders" class="tab-content">
     <h2 style="text-align: center;"><i class="fas fa-clipboard-list"></i> मेरो अर्डर इतिहास</h2>
-    <div id="orderHistoryList" class="dashboard-panel">
-        <p>तपाईंले अहिलेसम्म कुनै अर्डर गर्नुभएको छैन। माथिको कुनै पनि 'अर्डर' बटन थिचेर सुरु गर्नुहोस्।</p>
+    <div id="orderHistoryList" class="dashboard-panel" style="background: #fffdf7; border-radius: 32px; padding: 1.5rem; margin-top: 1rem;">
+        <p>तपाईंले अहिलेसम्म कुनै अर्डर गर्नुभएको छैन।</p>
     </div>
 </div>
 
 <footer>
     <p><i class="fas fa-city"></i> बिरतमोड नगरपालिका – सबैको लागि समावेशी पेरी-अर्बन विकास</p>
-    <p style="font-size:0.8rem;">⚡ अन्तरक्रियात्मक डेमो | तपाईंको अर्डर ब्राउजरमै सेभ हुन्छ</p>
+    <p style="font-size:0.85rem;">⚡ अन्तरक्रियात्मक डेमो | अर्डरहरू ब्राउजरमै सेभ हुन्छन्</p>
 </footer>
 
 <script>
-    // ==================== DEMO STATE MANAGEMENT (USING localStorage) ====================
-    // This script makes the website fully interactive with:
-    // 1. User session simulation (localStorage)
-    // 2. Order placement with real-time feedback
-    // 3. Order history visible in 'My Orders' tab
-
-    // Helper function to show a temporary notification
-    function showNotification(message, type = 'success') {
-        const notif = document.createElement('div');
-        notif.className = 'notification';
-        notif.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${message}`;
-        document.body.appendChild(notif);
-        setTimeout(() => notif.remove(), 3000);
+    // ---------- Interactive Demo Logic (localStorage) ----------
+    function showNotification(msg) {
+        let n = document.createElement('div');
+        n.className = 'notification';
+        n.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 3000);
     }
 
-    // Get current logged-in user (demo purpose, we'll just use 'demoUser')
-    function getCurrentUser() {
-        let user = localStorage.getItem('demoUser');
-        if (!user) {
-            // Default: no user logged in
-            return null;
-        }
-        return user;
-    }
-
+    function getCurrentUser() { return localStorage.getItem('demoUser'); }
     function setCurrentUser(user) {
-        if (user) {
-            localStorage.setItem('demoUser', user);
-        } else {
-            localStorage.removeItem('demoUser');
-        }
+        if (user) localStorage.setItem('demoUser', user);
+        else localStorage.removeItem('demoUser');
         updateLoginUI();
         loadOrderHistory();
     }
-
     function updateLoginUI() {
-        const user = getCurrentUser();
-        const loginStatusSpan = document.getElementById('loginStatus');
-        const loginBtn = document.getElementById('demoLoginBtn');
-        const logoutBtn = document.getElementById('demoLogoutBtn');
+        let user = getCurrentUser();
+        let statusSpan = document.getElementById('loginStatus');
+        let loginBtn = document.getElementById('demoLoginBtn');
+        let logoutBtn = document.getElementById('demoLogoutBtn');
         if (user) {
-            loginStatusSpan.innerHTML = `<i class="fas fa-user-check"></i> स्वागत छ, ${user}`;
+            statusSpan.innerHTML = `<i class="fas fa-user-check"></i> ${user}`;
             loginBtn.style.display = 'none';
             logoutBtn.style.display = 'inline-block';
         } else {
-            loginStatusSpan.innerHTML = `<i class="fas fa-user"></i> पाहुना प्रयोगकर्ता (अर्डर गर्न लगइन गर्नुहोस्)`;
+            statusSpan.innerHTML = `<i class="fas fa-user"></i> पाहुना (अर्डर गर्न लगइन गर्नुहोस्)`;
             loginBtn.style.display = 'inline-block';
             logoutBtn.style.display = 'none';
         }
     }
 
-    // Order functions: store orders in localStorage
-    function saveOrder(productName, price, market = null) {
-        const user = getCurrentUser();
-        if (!user) {
-            showNotification('कृपया पहिले "प्रवेश गर्नुहोस्" बटन थिचेर लगइन गर्नुहोस्।', 'info');
-            return false;
-        }
-        const order = {
-            id: Date.now(),
-            product: productName,
-            price: price,
-            market: market,
-            date: new Date().toLocaleString('ne-NP'),
-            status: 'Pending (डेमो)',
-            deliveryAgent: 'स्थानीय डेलिभरी एजेन्ट (Demo)'
-        };
+    function saveOrder(product, price) {
+        let user = getCurrentUser();
+        if (!user) { showNotification('कृपया पहिले प्रवेश गर्नुहोस्'); return false; }
         let orders = JSON.parse(localStorage.getItem(`orders_${user}`) || '[]');
-        orders.unshift(order); // add at beginning
+        orders.unshift({ id: Date.now(), product, price, date: new Date().toLocaleString(), status: 'प्रोसेसिङ' });
         localStorage.setItem(`orders_${user}`, JSON.stringify(orders));
-        showNotification(`✅ "${productName}" अर्डर गरियो। कुल रकम: रु. ${price}`);
-        loadOrderHistory(); // refresh order list if visible
+        showNotification(`✅ "${product}" अर्डर गरियो (रु. ${price})`);
+        loadOrderHistory();
         return true;
     }
 
     function loadOrderHistory() {
-        const user = getCurrentUser();
-        const container = document.getElementById('orderHistoryList');
+        let user = getCurrentUser();
+        let container = document.getElementById('orderHistoryList');
         if (!container) return;
-        if (!user) {
-            container.innerHTML = `<p><i class="fas fa-lock"></i> अर्डर हेर्नको लागि कृपया लगइन गर्नुहोस्।</p>`;
-            return;
-        }
-        const orders = JSON.parse(localStorage.getItem(`orders_${user}`) || '[]');
-        if (orders.length === 0) {
-            container.innerHTML = `<p>तपाईंले अहिलेसम्म कुनै अर्डर गर्नुभएको छैन। माथिको कुनै पनि 'अर्डर' बटन थिचेर सुरु गर्नुहोस्।</p>`;
-            return;
-        }
-        let html = `<div style="max-height:500px; overflow-y:auto;">`;
-        orders.forEach(order => {
-            html += `<div class="order-summary" style="margin-bottom:12px;">
-                        <div><strong>${order.product}</strong> - रु. ${order.price}</div>
-                        <div><small>अर्डर मिति: ${order.date}</small></div>
-                        <div><small>स्थिति: ${order.status} | ${order.deliveryAgent}</small></div>
-                     </div>`;
-        });
-        html += `</div><div style="margin-top:15px; font-size:0.9rem;">🔔 यो डेमोमा अर्डरहरू तपाईंको ब्राउजरको स्थानीय मेमोरीमा सेभ गरिन्छ।</div>`;
+        if (!user) { container.innerHTML = `<p><i class="fas fa-lock"></i> अर्डर हेर्न लगइन गर्नुहोस्।</p>`; return; }
+        let orders = JSON.parse(localStorage.getItem(`orders_${user}`) || '[]');
+        if (orders.length === 0) { container.innerHTML = `<p>कुनै अर्डर छैन। अर्डर गर्नुहोस्।</p>`; return; }
+        let html = `<div style="max-height:500px; overflow:auto;">`;
+        orders.forEach(o => { html += `<div class="order-summary" style="background:#f9f3e3; padding:12px; border-radius:20px; margin-bottom:12px;"><b>${o.product}</b> - रु. ${o.price}<br><small>${o.date}</small><br><span class="tag">स्थिति: ${o.status}</span></div>`; });
+        html += `</div><p style="font-size:0.8rem;">🔒 सिमुलेशन: अर्डरहरू तपाईंको ब्राउजरमा मात्र सेभ हुन्छन्।</p>`;
         container.innerHTML = html;
     }
 
-    // Event listener for all order buttons (dynamically added)
-    function attachOrderButtons() {
+    // attach event listeners to all order buttons
+    function attachOrderEvents() {
         document.querySelectorAll('.small-order, .mock-order, .order-btn').forEach(btn => {
-            // Remove previous listeners to avoid duplication
-            btn.removeEventListener('click', window._orderHandler);
-            const handler = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const product = btn.getAttribute('data-product');
-                const price = btn.getAttribute('data-price');
-                if (product && price) {
-                    const market = btn.closest('[data-market]')?.getAttribute('data-market') || 'स्थानीय बजार';
-                    saveOrder(product, parseInt(price), market);
-                } else {
-                    showNotification('डेमो: उत्पादनको जानकारी छैन।', 'info');
-                }
+            btn.removeEventListener('click', window._handler);
+            let handler = (e) => {
+                let prod = btn.getAttribute('data-product');
+                let price = parseInt(btn.getAttribute('data-price'));
+                if (prod && price) saveOrder(prod, price);
+                else showNotification('उत्पादन जानकारी छैन');
             };
             btn.addEventListener('click', handler);
-            window._orderHandler = handler; // store for potential future cleanup
+            window._handler = handler;
         });
     }
 
-    // Login/Logout Handlers
-    document.getElementById('demoLoginBtn')?.addEventListener('click', () => {
-        const name = prompt('डेमो लगइन: आफ्नो नाम प्रविष्ट गर्नुहोस् (जस्तै: "राम", "सीता")', 'प्रयोगकर्ता');
-        if (name && name.trim()) {
-            setCurrentUser(name.trim());
-            showNotification(`स्वागत छ, ${name}! तपाईंले अहिले अर्डर गर्न सक्नुहुन्छ।`);
-        } else {
-            showNotification('नाम रित्तो हुन सक्दैन।', 'info');
-        }
+    // login/logout
+    document.getElementById('demoLoginBtn').addEventListener('click', () => {
+        let name = prompt('तपाईंको नाम (डेमो लगइन):', 'स्थानीय व्यापारी');
+        if (name) setCurrentUser(name.trim());
     });
-    document.getElementById('demoLogoutBtn')?.addEventListener('click', () => {
-        setCurrentUser(null);
-        showNotification('तपाईं लग आउट हुनुभयो।');
-        const container = document.getElementById('orderHistoryList');
-        if (container) container.innerHTML = `<p>लगइन गरेपछि मात्र अर्डर हेर्न सकिन्छ।</p>`;
-    });
+    document.getElementById('demoLogoutBtn').addEventListener('click', () => { setCurrentUser(null); showNotification('लग आउट भयो'); });
 
-    // Tab switching logic (same as before, but ensure that when orders tab is activated, we load history)
-    const tabs = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('.tab-content');
+    // tab switching
+    let tabs = document.querySelectorAll('.tab-btn');
+    let contents = document.querySelectorAll('.tab-content');
     tabs.forEach(btn => {
         btn.addEventListener('click', () => {
-            const tabId = btn.getAttribute('data-tab');
-            contents.forEach(content => content.classList.remove('active'));
+            let tabId = btn.getAttribute('data-tab');
+            contents.forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             tabs.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            if (tabId === 'orders') {
-                loadOrderHistory();
-            }
+            if (tabId === 'orders') loadOrderHistory();
         });
     });
 
-    // Initialization
+    attachOrderEvents();
     updateLoginUI();
-    attachOrderButtons();
     loadOrderHistory();
 </script>
 </body>
-</html>
+            </html>
